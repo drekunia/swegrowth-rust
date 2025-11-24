@@ -6,6 +6,6 @@
 
 ## How To Run
 
-- `cargo run` (defaults to case case-sensitive)
+- `cargo run` (defaults to case-sensitive)
 - `cargo run -- --case-sensitive`
 - `cargo run -- --case-insensitive`
