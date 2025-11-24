@@ -65,7 +65,7 @@ fn main() {
         longest_palindrome_combination_count);
 }
 
-fn count_longest_palindrome_combination(input: &str) -> i32 {
+fn count_longest_palindrome_combination(input: &str) -> usize {
     let mut length = 0;
     let mut seen = [false; 128];
 
@@ -80,7 +80,7 @@ fn count_longest_palindrome_combination(input: &str) -> i32 {
         }
     }
 
-    if length < input.len() as i32 {
+    if length < input.len() as usize {
         length += 1;
     }
 
