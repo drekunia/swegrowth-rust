@@ -55,16 +55,39 @@ fn main() {
         println!("Input contains non-alphabetic characters. Filtered input, using \"{word}\" instead.");
     }
 
-    let longest_palindrome = get_longest_palindrome(&word);
+    let longest_palindrome_segment = get_longest_palindrome_segment(&word);
+    let longest_palindrome_combination_count = count_longest_palindrome_combination(&word);
 
-    if longest_palindrome.is_empty() {
-        println!("No palindrome can be made from those letters.");
-    } else {
-        println!("Longest palindrome is \"{}\" with {} letters.", longest_palindrome, longest_palindrome.len());
-    }
+    println!("Longest palindrome segment in the given phrase/word is {} letters long (i.e. \"{}\").",
+        longest_palindrome_segment.len(), longest_palindrome_segment);
+
+    println!("Longest palindrome that can be made from the combination of given letters is {} letters long.",
+        longest_palindrome_combination_count);
 }
 
-fn get_longest_palindrome(input: &str) -> String {
+fn count_longest_palindrome_combination(input: &str) -> i32 {
+    let mut length = 0;
+    let mut seen = [false; 128];
+
+    for b in input.bytes() {
+        let ascii = b as usize;
+        
+        if seen[ascii] {
+            length += 2;
+            seen[ascii] = false;
+        } else {
+            seen[ascii] = true;
+        }
+    }
+
+    if length < input.len() as i32 {
+        length += 1;
+    }
+
+    length
+}
+
+fn get_longest_palindrome_segment(input: &str) -> String {
     let word_struct = to_word_struct(&input);
     let mut longest_palindrome = String::new();
 
