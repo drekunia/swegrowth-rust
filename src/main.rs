@@ -2,7 +2,7 @@ use std::env;
 use std::io;
 use std::io::Write;
 
-const DEFAULT_LETTERS: &str = "palindrome";
+const DEFAULT_LETTERS: &str = "mississippi";
 
 struct Word {
     letters: Vec<char>,
@@ -21,7 +21,7 @@ fn main() {
 
     if args.len() > 1 {
         if args.len() > 2 {
-            println!("Too many arguments. Only --case-insensitive or --case-insensitive allowed.");
+            println!("Too many arguments. Only --case-sensitive or --case-insensitive allowed.");
             return;
         } else {
            mode = match args[1].as_str() {
