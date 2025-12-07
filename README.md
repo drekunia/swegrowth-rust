@@ -2,7 +2,8 @@
 
 ## Problem
 
-[Week 1 Task](https://github.com/zonblade/mentoring-2025/issues/1)
+- [Week 1 Task](https://github.com/zonblade/mentoring-2025/issues/1)
+- [Week 2 Task](https://github.com/zonblade/mentoring-2025/issues/2)
 
 ## How To Run
 
