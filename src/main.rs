@@ -1,46 +1,34 @@
 use std::env;
-use std::io;
-use std::io::Write;
+
+mod cli;
+mod palindrome_combination;
+mod palindrome_segment;
+mod word;
+
+use crate::cli::*;
+use crate::palindrome_combination::*;
+use crate::palindrome_segment::*;
 
 const DEFAULT_LETTERS: &str = "mississippi";
 
-struct Word {
-    letters: Vec<char>,
-    count: usize
-}
-
-#[derive(Debug, PartialEq)]
-enum CaseMode {
-    CaseSensitive,
-    CaseInsensitive
-}
-
 fn main() {
     let args: Vec<String> = env::args().collect();
-    let mut mode = CaseMode::CaseSensitive;
 
-    if args.len() > 1 {
-        if args.len() > 2 {
-            println!("Too many arguments. Only --case-sensitive or --case-insensitive allowed.");
+   let mode = match parse_args(&args) {
+        Ok(m) => m,
+        Err(msg) => {
+            println!("{}", msg);
             return;
-        } else {
-           mode = match args[1].as_str() {
-                "--case-sensitive" => CaseMode::CaseSensitive,
-                "--case-insensitive" => CaseMode::CaseInsensitive,
-                
-                invalid_arg => {
-                    println!("Unknown argument '{}'. Valid options are --case-sensitive or --case-insensitive.", invalid_arg);
-                    return;
-                }
-            }; 
         }
-    }
+    }; 
 
-    print!("Enter letters ({:?}): ", mode);
-    io::stdout().flush().unwrap();
-    let mut input = String::new();
-
-    io::stdin().read_line(&mut input).expect("Failed to read input.");
+    let input = match prompt_input(&mode) {
+        Ok(s) => s,
+        Err(e) => {
+            println!("Failed to read input: {}", e);
+            return;
+        }
+    };
 
     let mut word = match mode {
         CaseMode::CaseInsensitive => input.to_lowercase().trim().to_string(),
@@ -63,65 +51,5 @@ fn main() {
 
     println!("Longest palindrome that can be made from the combination of given letters is {} letters long.",
         longest_palindrome_combination_count);
-}
-
-fn count_longest_palindrome_combination(input: &str) -> usize {
-    let mut length = 0;
-    let mut seen = [false; 128];
-
-    for b in input.bytes() {
-        let ascii = b as usize;
-        
-        if seen[ascii] {
-            length += 2;
-            seen[ascii] = false;
-        } else {
-            seen[ascii] = true;
-        }
-    }
-
-    if length < input.len() as usize {
-        length += 1;
-    }
-
-    length
-}
-
-fn get_longest_palindrome_segment(input: &str) -> String {
-    let word_struct = to_word_struct(&input);
-    let mut longest_palindrome = String::new();
-
-    for i in 0..word_struct.count {
-        for j in i + 1..=word_struct.count {
-            let word: String = word_struct.letters[i..j].iter().collect();
-
-            if (word.len() > longest_palindrome.len()) && is_palindrome(&word) {
-    longest_palindrome = word;
-            }
-        }
-    }
-
-    longest_palindrome
-}
-
-fn is_palindrome(word: &str) -> bool {
-    let word_struct = to_word_struct(&word);
-
-    for i in 0..word_struct.count / 2 {
-        if word_struct.letters[i] != word_struct.letters[word_struct.count - 1 - i] {
-            return false;
-        }
-    }
-
-    true
-}
-
-fn to_word_struct(word: &str) -> Word {
-    let letters: Vec<char> = word.chars().collect();
-
-    Word {
-        letters: letters.clone(),
-        count: letters.len(),
-    }
 }
 
