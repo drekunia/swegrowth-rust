@@ -12,4 +12,3 @@ pub fn to_word_struct(word: &str) -> Word {
         count: letters.len(),
     }
 }
-

@@ -14,13 +14,13 @@ const DEFAULT_LETTERS: &str = "mississippi";
 fn main() {
     let args: Vec<String> = env::args().collect();
 
-   let mode = match parse_args(&args) {
+    let mode = match parse_args(&args) {
         Ok(m) => m,
         Err(msg) => {
             println!("{}", msg);
             return;
         }
-    }; 
+    };
 
     let input = match prompt_input(&mode) {
         Ok(s) => s,
@@ -34,22 +34,28 @@ fn main() {
         CaseMode::CaseInsensitive => input.to_lowercase().trim().to_string(),
         CaseMode::CaseSensitive => input.trim().to_string(),
     };
-    
+
     if word.is_empty() {
-        println!("No letters found. Using the word \"{DEFAULT_LETTERS}\" instead.");
         word = DEFAULT_LETTERS.to_string();
+        println!("No letters found. Using the word \"{word}\" instead.");
     } else if !word.chars().all(|c| c.is_alphabetic()) {
-        let word: String = word.chars().filter(|c| c.is_alphabetic()).collect();
-        println!("Input contains non-alphabetic characters. Filtered input, using \"{word}\" instead.");
-    }
+        word = word.chars().filter(|c| c.is_alphabetic()).collect();
+        println!(
+            "Input contains non-alphabetic characters. Filtered input, using \"{word}\" instead."
+        );
+    };
 
     let longest_palindrome_segment = get_longest_palindrome_segment(&word);
     let longest_palindrome_combination_count = count_longest_palindrome_combination(&word);
 
-    println!("Longest palindrome segment in the given phrase/word is {} letters long (i.e. \"{}\").",
-        longest_palindrome_segment.len(), longest_palindrome_segment);
+    println!(
+        "Longest palindrome segment in the given phrase/word is {} letters long (i.e. \"{}\").",
+        longest_palindrome_segment.len(),
+        longest_palindrome_segment
+    );
 
-    println!("Longest palindrome that can be made from the combination of given letters is {} letters long.",
-        longest_palindrome_combination_count);
+    println!(
+        "Longest palindrome that can be made from the combination of given letters is {} letters long.",
+        longest_palindrome_combination_count
+    );
 }
-
